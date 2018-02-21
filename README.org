@@ -1,0 +1,10 @@
+* Installation
+
+The first step for installing this plugin is including it in a zip file:
+
+~zip bae-mastermind-service.zip package.json mastermind-plugin.py mastermind-schema.json~
+
+* Loading the plugin
+Then, load the plugin into the platform using the *loadplugin* command of the Business Ecosystem Charging Backend
+
+~./manage.py loadplugin /path/to/your/plugin/bae-mastermind-service.zip~
