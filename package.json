@@ -1,0 +1,8 @@
+{
+    "name": "MasterMind Service",
+    "author": "sgarcia",
+    "version": "0.1",
+    "module": "mastermind-plugin.MastermindPlugin",
+    "media_types": ["application/zip"],
+    "form": {}
+}
