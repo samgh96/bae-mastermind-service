@@ -3,44 +3,41 @@
     "author": "sgarcia",
     "version": "0.1",
     "module": "mastermind-plugin.MastermindPlugin",
-    "media_types": ["application/zip"],
+    "media_types": ["URL"],
+    "formats": [
+        "URL"
+    ],
     "form": {
-	"name": {
-	    "type": "textarea",
-	    "label": "Service name",
+        "name": {
+            "type": "textarea",
+            "label": "Service name",
+            "placeholder": "Required"
+        },
+        "version": {
+            "type": "textarea",
+            "label": "Version number",
 	    "placeholder": "Required"
-	},
-	"version": {
-	    "type": "textarea",
-	    "label": "Version number",
-	    
-	},
-	"ngsi_version": {
-	    "type": "text",
-	    "label": "NGSI Version",
-	    "placeholder": "Required"
-	},
-	"service_protocol_type": {
-	    "type": "text",
-	    "label": "Service protocol type",
-	    "placeholder": "Required"
-	},
-	"configuration_template": {
-	    "type": "textarea",
-	    "label": "Mastermind.yml",
-	    "placeholder": "Required"
-	},
-	"deploy_template": {
-	    "type": "textarea",
-	    "label": "docker-compose.yml",
-	    "default": "none",
-	    "placeholder": "Optional"
-	},
-	"url": {
-	    "type": "textarea",
-	    "label": "MasterMind URL",
-	    "placeholder": "Required"
-	}
-	
+        },
+        "ngsi_version": {
+            "type": "text",
+            "label": "NGSI Version",
+            "placeholder": "Required"
+        },
+        "service_protocol_type": {
+            "type": "text",
+            "label": "Service protocol type",
+            "placeholder": "Required"
+        },
+        "configuration_template": {
+            "type": "textarea",
+            "label": "Mastermind.yml",
+            "placeholder": "Required"
+        },
+        "deploy_template": {
+            "type": "textarea",
+            "label": "docker-compose.yml",
+            "default": "none",
+            "placeholder": "Optional"
+        },
     }
 }
