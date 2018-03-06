@@ -3,7 +3,9 @@
     "author": "sgarcia",
     "version": "0.1",
     "module": "mastermind-plugin.MastermindPlugin",
-    "media_types": ["URL"],
+    "media_types": [
+        "URL"
+    ],
     "formats": [
         "URL"
     ],
@@ -16,7 +18,7 @@
         "version": {
             "type": "textarea",
             "label": "Version number",
-	    "placeholder": "Required"
+            "placeholder": "Required"
         },
         "ngsi_version": {
             "type": "text",
@@ -38,6 +40,6 @@
             "label": "docker-compose.yml",
             "default": "none",
             "placeholder": "Optional"
-        },
+        }
     }
 }
