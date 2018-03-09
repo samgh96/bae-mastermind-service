@@ -4,7 +4,7 @@
     "version": "0.1",
     "module": "mastermind-plugin.MastermindPlugin",
     "media_types": [
-        "URL"
+	"Mastermind URL"
     ],
     "formats": [
         "URL"
