@@ -1,5 +1,5 @@
-{
-    "$schema": "http://json-schema.org/draft-07/schema#",
+class MastermindSchema:
+    _schema = {"$schema": "http://json-schema.org/draft-07/schema#", 
     "title": "mastermindSchema",
     "description": "A schema used to validate mastermind.yml translated to JSON",
     "type": "object",
@@ -22,7 +22,7 @@
 		    "default": { "type": "string" }
 		},
 		"minProperties": 6,
-		"additionalProperties": false
+		"additionalProperties": False
 	    }
 	},
 	"services": {
@@ -39,10 +39,10 @@
 		    "as": { "type": "string" }
 		},
 		"minProperties": 7,
-		"additionalProperties": false
+		"additionalProperties": False
 	    }
 	}
     },
     "minProperties": 7,
-    "additionalProperties": false
-}
+    "additionalProperties": False
+    }                
