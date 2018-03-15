@@ -1,7 +1,7 @@
 import jsonschema
 import yaml
 import requests
-import ipdb
+# import ipdb
 
 from wstore.asset_manager.resource_plugins.plugin import Plugin
 from mastermindschema import MastermindSchema
@@ -19,7 +19,7 @@ class MastermindPlugin(Plugin):
         return [str(x.message) for x in errors]
 
     def _create_service_mm(self, asset, mm_url, headers):
-        ipdb.sset_trace()
+        # ipdb.sset_trace()
         if not mm_url:
             raise ValueError("URL must be specified")
         try:
@@ -48,7 +48,7 @@ class MastermindPlugin(Plugin):
 
     def on_pre_product_spec_attachment(self, asset, asset_t, product_spec):
         url = settings.CATALOG
-        ipdb.sset_trace()
+        # ipdb.sset_trace()
         if not url.endswith("/"):
             url += "/"
         url += "api/catalogManagement/v2/productSpecification/{}".format(product_spec["id"])
