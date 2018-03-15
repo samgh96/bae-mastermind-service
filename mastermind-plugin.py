@@ -37,14 +37,13 @@ class MastermindPlugin(Plugin):
         return mm_url + str(mm_req.json().get('id'))
 
     def on_post_product_spec_validation(self, provider, asset):
-
+        # ipdb.sset_trace()
         mastermind = asset.meta_info['configuration_template']
         err_list = self._validate(mastermind, self._yaml_validator)
 
         if len(err_list):
             raise ValueError("Found errors in mastermind.yml: "' '.join(err_list))
-
-        # self._create_service_mm(asset, asset.get_url(), self._headers)
+        # ipdb.sset_trace()
 
     def on_pre_product_spec_attachment(self, asset, asset_t, product_spec):
         url = settings.CATALOG
@@ -54,7 +53,11 @@ class MastermindPlugin(Plugin):
         url += "api/catalogManagement/v2/productSpecification/{}".format(product_spec["id"])
 
         asset.download_link = self._create_service_mm(asset, asset.get_url(), self._headers)
-        product_spec['productSpecCharacteristic'][2]['productSpecCharacteristicValue'][0]['value'] = asset.download_link
+
+        for i in product_spec['productSpecCharacteristic']:
+            if i['name'] == 'Location':
+                i['productSpecCharacteristicValue'][0]['value'] = asset.download_link
+
         spec_req = requests.put(url, json=product_spec, headers=self._headers)
         spec_req.raise_for_status()
         asset.save()
