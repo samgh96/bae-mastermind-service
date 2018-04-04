@@ -1,48 +1,33 @@
 class MastermindSchema:
-    _schema = {"$schema": "http://json-schema.org/draft-07/schema#", 
-    "title": "mastermindSchema",
-    "description": "A schema used to validate mastermind.yml translated to JSON",
-    "type": "object",
-    "properties": {
-	"name": { "type": "string" },
-	"version": { "type": "string" },
-	"description": { "type": "string" },
-	"protocol_type": { "type": "string" },
-	"ngsi_version": { "type": "integer" },
-	"environment_variables": {
-	    "type": "array",
-	    "items": {
-		"type": "object",
-		"properties": {
-		    "variable": { "type": "string" },
-		    "name": { "type": "string" },
-		    "description": { "type": "string" },
-		    "required": { "type": "boolean" },
-		    "managed": { "type": "boolean" },
-		    "default": { "type": "string" }
-		},
-		"minProperties": 6,
-		"additionalProperties": False
-	    }
-	},
-	"services": {
-	    "type": "array",
-	    "items": {
-		"type": "object",
-		"properties": {
-		    "service_type": { "type": "string" },
-		    "name": { "type": "string" },
-		    "description": { "type": "string" },
-		    "required": { "type": "boolean" },
-		    "managed": { "type": "boolean" },
-		    "retrieve": { "type": "string"},
-		    "as": { "type": "string" }
-		},
-		"minProperties": 7,
-		"additionalProperties": False
-	    }
-	}
-    },
-    "minProperties": 7,
-    "additionalProperties": False
-    }                
+    _schema = {'$schema': 'http://json-schema.org/draft-04/schema#',
+               'additionalProperties': False,
+               'description': 'A schema used to validate mastermind.yml translated to JSON',
+               'properties': {'description': {'type': 'string'},
+                              'environment_variables': {'items': {'additionalProperties': False,
+                                                                  'minProperties': 6,
+                                                                  'properties': {'default': {'type': ['string', 'number', 'boolean']},
+                                                                                 'description': {'type': 'string'},
+                                                                                 'managed': {'type': 'boolean'},
+                                                                                 'name': {'type': 'string'},
+                                                                                 'required': {'type': 'boolean'},
+                                                                                 'variable': {'type': 'string'}},
+                                                                  'type': 'object'},
+                                                        'type': 'array'},
+                              'name': {'type': 'string'},
+                              'ngsi_version': {'type': 'integer'},
+                              'protocol_type': {'type': 'string'},
+                              'services': {'items': {'additionalProperties': False,
+                                                     'minProperties': 7,
+                                                     'properties': {'as': {'type': 'string'},
+                                                                    'description': {'type': 'string'},
+                                                                    'managed': {'type': 'boolean'},
+                                                                    'name': {'type': 'string'},
+                                                                    'required': {'type': 'boolean'},
+                                                                    'retrieve': {'type': 'string'},
+                                                                    'service_type': {'type': 'string'}},
+                                                     'type': 'object'},
+                                           'type': 'array'},
+                              'version': {'type': ['string', 'number']}},
+               'required': ['name', 'version', 'protocol_type', 'description', 'ngsi_version'],
+               'title': 'mastermindSchema',
+               'type': 'object'}
