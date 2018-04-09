@@ -1,10 +1,11 @@
 import jsonschema
 import yaml
 import requests
-# import ipdb
+import ipdb
 
 from wstore.asset_manager.resource_plugins.plugin import Plugin
 from mastermindschema import MastermindSchema
+from keystone_client import KeystoneClient
 
 from django.conf import settings
 
@@ -13,6 +14,13 @@ class MastermindPlugin(Plugin):
 
     _yaml_validator = MastermindSchema._schema
     _headers = {'content-type': 'application/json'}
+
+    def _get_keystone_client(self, url):
+        keystone_client = KeystoneClient()
+        keystone_client.set_resource_url(url)
+        keystone_client.set_app_id(keystone_client._get_app_id())
+
+        return keystone_client
 
     def _validate(self, yml, validator):
         errors = sorted(jsonschema.Draft4Validator(validator).iter_errors(yaml.load(yml)), key=lambda e: e.path)
@@ -37,22 +45,28 @@ class MastermindPlugin(Plugin):
         return mm_url + str(mm_req.json().get('id'))
 
     def on_post_product_spec_validation(self, provider, asset):
-        # ipdb.sset_trace()
+        ipdb.sset_trace()
+        kc = self._get_keystone_client(asset.get_url())  # :8088
+        kc.check_ownership(provider.name)
         mastermind = asset.meta_info['configuration_template']
         err_list = self._validate(mastermind, self._yaml_validator)
 
         if len(err_list):
             raise ValueError("Found errors in mastermind.yml: "' '.join(err_list))
+
+        asset.meta_info.update({'api_url': kc._api_url})
+
+        asset.save()
         # ipdb.sset_trace()
 
     def on_pre_product_spec_attachment(self, asset, asset_t, product_spec):
         url = settings.CATALOG
-        # ipdb.sset_trace()
+        ipdb.sset_trace()
         if not url.endswith("/"):
             url += "/"
         url += "api/catalogManagement/v2/productSpecification/{}".format(product_spec["id"])
 
-        asset.download_link = self._create_service_mm(asset, asset.get_url(), self._headers)
+        asset.download_link = self._create_service_mm(asset, asset.meta_info['api_url'], self._headers)
 
         for i in product_spec['productSpecCharacteristic']:
             if i['name'] == 'Location':
@@ -61,3 +75,9 @@ class MastermindPlugin(Plugin):
         spec_req = requests.put(url, json=product_spec, headers=self._headers)
         spec_req.raise_for_status()
         asset.save()
+
+    def on_product_acquisition(self, asset, contract, order):
+        pass
+
+    def on_product_suspension(self, asset, contract, order):
+        pass
