@@ -1,7 +1,6 @@
 import jsonschema
 import yaml
 import requests
-import ipdb
 
 from wstore.asset_manager.resource_plugins.plugin import Plugin
 from mastermindschema import MastermindSchema
@@ -27,7 +26,6 @@ class MastermindPlugin(Plugin):
         return [str(x.message) for x in errors]
 
     def _create_service_mm(self, asset, mm_url, headers):
-        # ipdb.sset_trace()
         if not mm_url:
             raise ValueError("URL must be specified")
         try:
@@ -45,7 +43,6 @@ class MastermindPlugin(Plugin):
         return mm_url + str(mm_req.json().get('id'))
 
     def on_post_product_spec_validation(self, provider, asset):
-        ipdb.sset_trace()
         kc = self._get_keystone_client(asset.get_url())  # :8088
         kc.check_ownership(provider.name)
         mastermind = asset.meta_info['configuration_template']
@@ -54,14 +51,12 @@ class MastermindPlugin(Plugin):
         if len(err_list):
             raise ValueError("Found errors in mastermind.yml: "' '.join(err_list))
 
-        asset.meta_info.update({'api_url': kc._api_url})
+        asset.meta_info.update({'api_url': kc._api_url, 'app_id': kc.get_app_id()})
 
         asset.save()
-        # ipdb.sset_trace()
 
     def on_pre_product_spec_attachment(self, asset, asset_t, product_spec):
         url = settings.CATALOG
-        ipdb.sset_trace()
         if not url.endswith("/"):
             url += "/"
         url += "api/catalogManagement/v2/productSpecification/{}".format(product_spec["id"])
@@ -77,7 +72,9 @@ class MastermindPlugin(Plugin):
         asset.save()
 
     def on_product_acquisition(self, asset, contract, order):
-        pass
+        kc = self._get_keystone_client(asset.get_url().split('v1')[0])
+        kc.grant_permission(order.customer, 'owner')
 
     def on_product_suspension(self, asset, contract, order):
-        pass
+        kc = self._get_keystone_client(asset.get_url().split('v1')[0])
+        kc.revoke_permission(order.customer, 'owner')

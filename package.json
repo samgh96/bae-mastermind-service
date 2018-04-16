@@ -4,7 +4,7 @@
     "version": "0.1",
     "module": "mastermind-plugin.MastermindPlugin",
     "media_types": [
-	"Mastermind API URL"
+        "Mastermind API URL"
     ],
     "formats": [
         "URL"
@@ -14,37 +14,40 @@
             "type": "textarea",
             "label": "Service name",
             "placeholder": "Required",
-	    "mandatory": true
+            "mandatory": true
         },
         "version": {
             "type": "textarea",
             "label": "Version number",
             "placeholder": "Required",
-	    "mandatory": true
+            "mandatory": true
         },
         "ngsi_version": {
             "type": "select",
             "label": "NGSI Version",
-            "options": [{
-		"text": {"1"},
-		"value": 1
-	    },{
-		"text": {"2"},
-		"value": 2
-	    }]
-	    "mandatory": true
+            "options": [
+                {
+                    "text": "1",
+                    "value": "1"
+                },
+                {
+                    "text": "2",
+                    "value": "2"
+                }
+            ],
+            "mandatory": true
         },
         "service_protocol_type": {
             "type": "text",
             "label": "Service protocol type",
             "placeholder": "Required",
-	    "mandatory": true
+            "mandatory": true
         },
         "configuration_template": {
             "type": "textarea",
             "label": "Mastermind.yml",
             "placeholder": "Required",
-	    "mandatory": true
+            "mandatory": true
         },
         "deploy_template": {
             "type": "textarea",

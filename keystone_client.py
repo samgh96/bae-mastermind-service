@@ -78,13 +78,19 @@ class KeystoneClient(object):
             if 'url' in app['extra']:
                 app_url = urlparse(app['extra']['url'])
                 if app_url.netloc == parsed_url.netloc:
-                    self._api_url = app['redirect_uris'][0].split("/auth/login")[0] + '/v1/service_types'  # removes /auth/login
+                    api_url = app['redirect_uris'][0].split("/auth/login")[0]  # removes /auth/login
+                    if not api_url.endswith("/"):
+                        api_url += "/"
+                    self._api_url = api_url + 'v1/service_types'
                     app_id = app['id']
                     break
         else:
             raise PluginError('The provided app is not registered in keystone')
 
         return app_id
+
+    def get_app_id(self):
+        return self._app_id
 
     def set_app_id(self, app_id):
         if app_id is None:
