@@ -2,15 +2,15 @@
 
 The first step for installing this plugin is including it in a zip file:
 
-~zip bae-mastermind-service.zip package.json mastermind-plugin.py mastermind-schema.json~
+~zip bae-mastermind-service.zip package.json mastermind-plugin.py mastermindschema.py keystone_client.py~
 
 Next you need to install some dependencies in your charging backend Django server in order to load the plugin:
 
 ~pip install jsonschema pyyaml~
 
-And in the last place you should transfer ~mastermind-schema.json~ to ~manage.py~ folder.
-
+In order to grant permission to use MasterMind with the IdM you need to register a new role for the MasterMind application (the ~owner~ role),
+and also register MasterMind in the IdM with the MasterMind's API URL (by default ~:3000~).
 * Loading the plugin
-Then, load the plugin into the platform using the *loadplugin* command of the Business Ecosystem Charging Backend
+Then, load the plugin into the platform using the ~loadplugin~ command of your Business Ecosystem Charging Backend.
 
 ~./manage.py loadplugin /path/to/your/plugin/bae-mastermind-service.zip~

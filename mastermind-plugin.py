@@ -14,13 +14,6 @@ class MastermindPlugin(Plugin):
     _yaml_validator = MastermindSchema._schema
     _headers = {'content-type': 'application/json'}
 
-    def _get_keystone_client(self, url):
-        keystone_client = KeystoneClient()
-        keystone_client.set_resource_url(url)
-        keystone_client.set_app_id(keystone_client._get_app_id())
-
-        return keystone_client
-
     def _validate(self, yml, validator):
         errors = sorted(jsonschema.Draft4Validator(validator).iter_errors(yaml.load(yml)), key=lambda e: e.path)
         return [str(x.message) for x in errors]
@@ -43,7 +36,7 @@ class MastermindPlugin(Plugin):
         return mm_url + str(mm_req.json().get('id'))
 
     def on_post_product_spec_validation(self, provider, asset):
-        kc = self._get_keystone_client(asset.get_url())  # :8088
+        kc = KeystoneClient(asset.get_url(), is_url=True)
         kc.check_ownership(provider.name)
         mastermind = asset.meta_info['configuration_template']
         err_list = self._validate(mastermind, self._yaml_validator)
@@ -51,7 +44,7 @@ class MastermindPlugin(Plugin):
         if len(err_list):
             raise ValueError("Found errors in mastermind.yml: "' '.join(err_list))
 
-        asset.meta_info.update({'api_url': kc._api_url, 'app_id': kc.get_app_id()})
+        asset.meta_info.update({'api_url': kc.get_api_url(), 'app_id': kc.get_app_id()})
 
         asset.save()
 
@@ -72,9 +65,9 @@ class MastermindPlugin(Plugin):
         asset.save()
 
     def on_product_acquisition(self, asset, contract, order):
-        kc = self._get_keystone_client(asset.get_url().split('v1')[0])
+        kc = KeystoneClient(asset.meta_info['app_id'])
         kc.grant_permission(order.customer, 'owner')
 
     def on_product_suspension(self, asset, contract, order):
-        kc = self._get_keystone_client(asset.get_url().split('v1')[0])
+        kc = KeystoneClient(asset.meta_info['app_id'])
         kc.revoke_permission(order.customer, 'owner')
